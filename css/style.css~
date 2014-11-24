@@ -4,14 +4,12 @@ html, body {
 }
 
 #canvas_bg {
-	background: #d0edf2;
-	position: absolute;
-	z-index: -1;
-	min-height: 100%;
+	z-index: 1;
 }
 
 /* Header */
 .tml_header {
+	background: none;
 	padding-top: 20%;
 }
 
