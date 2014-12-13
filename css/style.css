@@ -34,9 +34,24 @@ html, body {
 	color: #293232;
 }
 
-.tml_bg .subtitle {
+.tml_bg_blue {
+	background: #32B6CC;
+	padding-top: 5%;
+ 	padding-bottom: 5%;
+	color: white;
+}
+
+.subtitle {
 	font-size: 25px;
 	font-weight: bolder;
+	padding-bottom: 2%;
+}
+
+.microtitle {
+	font-size: 20px;
+	padding-top: 2%;
+	padding-bottom: 5%;
+	font-weight: bold;
 }
 
 .tml_bg p {
@@ -45,7 +60,26 @@ html, body {
 	font-weight: lighter;
 }
 
-/* */
+.tml_var {
+	padding-top: 3%;
+}
+
+.tml_var p {
+	padding-top: 1%;
+	font-size: 18px;
+	font-weight: lighter;	
+}
+
+.tml_var_p {
+	font-size: 18px;
+	font-weight: lighter;	
+}
+
+.tml_vimg {
+	width: 30%;
+	padding-top: 4%;
+	padding-bottom: 3%;
+}
 
 /* Bootstrap Adjust */
 .fill {
