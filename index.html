@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="container-fluid text-center tml_bg_blue">
+    <div class="container-fluid text-center max_height tml_bg_blue">
     	<div class="container">
         	<div class="subtitle">VARIABLES</div>
         	<p class="tml_var_p">Each of the following variables were recorded each day for a period of approximately three weeks.</p>
@@ -45,101 +45,326 @@
         		<div class="col-md-6">
         			<img class="tml_vimg" src="img/sleep.png">
         			<div class="microtitle">Hours Slept</div>
-        			<p class="text-justify">Sleep is one of the most fundamental and natural part of our existence, aiding in cellular restoration as well as the reinforcement of neural connections in the brain. The hours of sleep will be calculated based on estimated times which will be recorded immediately before and after sleeping and recorded on a spreadsheet. Through this mindset of being concious of my sleep hours, I hope to observe the effects it may have with my other variable (lines of code produced).</p>
+        			<p class="text-justify">Sleep is one of the most fundamental and natural part of our existence, aiding in processes such as cellular restoration and the reinforcement of neural connections in the brain. The hours of sleep will be recorded based on estimated times of when I entered my bed and when I woke up from my bed. The data will be recorded immediately before and after sleeping and recorded on <a href="http://www.loggr.me/">Loggr</a>, an iPhone app designed for data tracking. When collecting data, however, potential issues may arise such as data entry input, forgetting to enter the data and losing the accumilated data. These errors will be reduced as much as possible to the best of my own ability during the three week observational period. Through analyzing my sleep patterns on a day to day basis, I hope to gain a better insight as to how many hours I sleep, and how this may potentially affect my performace in coding (and vice-versa).</p>
         		</div>
 
         		<div class="col-md-6">
         			<img class="tml_vimg" src="img/code.png">
         			<div class="microtitle">Lines of Code Produced</div>
-        			<p class="text-justify">As an aspiring coder, I aim to code and work on new and interesting projects every single day (if possible). I wanted to take this opportunity to see how much code I write on an average day and be able to overlay the trends along with the hours of sleep I have each day. Lines of code will be measured by counting the number of lines produced at the end of each day. (Any libraries and 3rd party codes that I used to make my project work will not be counted).</p>
+        			<p class="text-justify">As an aspiring coder, I aim to code and work on new and interesting projects every single day (if possible). I wanted to take this opportunity to see how much code I write on an average day and be able to overlay the trends along with the hours of sleep I have each day. Lines of code will be measured by counting the number of lines produced at the end of each day. (Any libraries and 3rd party-sources utilized in my projects will not be counted). To aid in the process of counting the lines of code produced, I will be using some of Github's analytical tools and numbers for my data (if any lines of code were pushed onto any of my Github repositories). All data will be recorded on Loggr. By being able to track the number of lines of code I produce on a daily basis, I can encourage myself to produce and work on new projects - keeping a habit of exercising my coding abilities.</p>
         		</div>
         	</div>
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid text-center max_height tml_bg">
+    	<div class="container">
+        	<div class="subtitle">DATA</div>
+        	<ul id="top_nav" class="nav nav-pills nav-justified top_nav">
+				<li id="sleep"role="presentation" class="active"><a>Hours of Sleep</a></li>
+				<li id="code"role="presentation"><a>Lines of Code</a></li>
+				<li id="both" role="presentation"><a>Both</a></li>
+			</ul>
+    	</div>
+    	<div class="container graph_container">
+			<div class="col-md-10">
+				<div id="chart_display"></div>
+			</div>
+			<div class="col-md-2">
+				<ul id="side_nav" class="nav nav-pills nav-stacked top_nav">
+					<li id="timeseries" role="presentation" class="active"><a>Timeseries</a></li>
+					<li id="scatter" role="presentation"><a>Scatter Plot</a></li>
+					<li id="residuals" role="presentation"><a>Residuals Graph</a></li>
+					<li id="histogram" role="presentation"><a>Histogram</a></li>
+					<li id="contingency" role="presentation"><a>Contingency Tables</a></li>
+					<li id="bandp" role="presentation"><a>Box & Whiskers</a></li>
+					<li id="general" role="presentation"><a>General Statistics</a></li>
+				</ul>
+			</div>
+		</div>
+    </div>
+
+    <div class="container-fluid text-center tml_bg_green">
+    	<div class="container">
+        	<div class="subtitle">ANALYSIS</div>
+    	</div>
+    </div>
+
+    <div class="container-fluid text-center tml_bg">
+    	<div class="container">
+        	<div class="subtitle">CONCLUDING REMARKS</div>
+    	</div>
+    </div>
+
+    <div class="container-fluid text-center tml_bg_blue">
+    	<div class="container">
+    		<p>
+    			<b>Created by Yuya Jeremy Ong</b> <br>
+    			Proudly Hosted by <a href="https://pages.github.com/">GitPages</a>
+    		</p>
+    	</div>
     </div>
 
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/Chart.min.js"></script>
-
+    <script src="js/graphEffect.js"></script>
+    <script src="js/data.js"></script>
     <script>
-        (function(){
-            // Colour variables
-            var red = "#bf616a",
-                blue = "#5B90BF",
-                orange = "#d08770",
-                yellow = "#ebcb8b",
-                green = "#a3be8c",
-                teal = "#96b5b4",
-                pale_blue = "#8fa1b3",
-                purple = "#b48ead",
-                brown = "#ab7967";
+    	var graphMode = 1;
+    	var graphType = 1;
 
+    	// Top Bar Selector
+    	$("#top_nav").click(function() {
+    		update();
+    	});
 
-                var baseDataset = {
-                    fill: 'rgba(222,225,232,0.4)',
-                    stroke: 'rgba(222,225,232,1)',
-                    highlight: 'rgba(222,225,232,0.8)',
-                    highlightStroke: 'rgba(222,225,232,1)'
-                },
-                overlayDataset = {
-                    fill: 'rgba(91,144,191,0.4)',
-                    stroke: 'rgba(91,144,191,1)',
-                    highlight: 'rgba(91,144,191,0.8)',
-                    highlightStroke: 'rgba(91,144,191,1)'
-                };
-            var data = [],
-                barsCount = 30,
-                labels = new Array(barsCount),
-                updateDelayMax = 500,
-                $id = function(id){
-                    return document.getElementById(id);
-                },
-                random = function(max){ return Math.round(Math.random()*100)},
-                helpers = Chart.helpers;
+    	$("#sleep").click(function() {
+    		graphMode = 1;
+    		$("#sleep").addClass("active");
+    		$("#code").removeClass("active");
+    		$("#both").removeClass("active");
 
-            Chart.defaults.global.responsive = true;
+    		$("#scatter").hide();
+			$("#residuals").hide();
+			if (graphType != '1') {
+	    		graphType = 1;
+	    		$("#timeseries").addClass("active");
+	    		$("#scatter").removeClass("active");
+	    		$("#residuals").removeClass("active");
+	    		$("#histogram").removeClass("active");
+	    		$("#contingency").removeClass("active");
+	    		$("#general").removeClass("active");
+	    		$("#bandp").removeClass("active");
+			}
+    	});
+    	$("#code").click(function() {
+    		graphMode = 2;
+    		$("#code").addClass("active");
+    		$("#sleep").removeClass("active");
+    		$("#both").removeClass("active");
 
-            for (var i = barsCount - 1; i >= 0; i--) {
-                data.push(Math.round(Math.random() * 100));
-            };
-            new Chart($id('canvas_bg').getContext('2d')).Bar({
-                labels : labels,
-                datasets : [{
-                    fillColor : '#A8DEE7',
-                    data : data
-                }]
-            },{
-                showScale : false,
-                barShowStroke : false,
-                barValueSpacing: 1,
-                showTooltips : false,
-                onAnimationComplete : function(){
-                    var heroChart = this,timeout;
-                    this.options.onAnimationComplete = randomUpdate;
-                    this.options.animationEasing = 'easeOutQuint';
+    		$("#scatter").hide();
+			$("#residuals").hide();
+			if (graphType != '1') {
+		    	graphType = 1;
+	    		$("#timeseries").addClass("active");
+	    		$("#scatter").removeClass("active");
+	    		$("#residuals").removeClass("active");
+	    		$("#histogram").removeClass("active");
+	    		$("#contingency").removeClass("active");
+	    		$("#general").removeClass("active");
+	    		$("#bandp").removeClass("active");			
+			}
+		});
+    	$("#both").click(function() {
+    		graphMode = 3;
+    		$("#both").addClass("active");
+    		$("#code").removeClass("active");
+    		$("#sleep").removeClass("active");
 
-                    randomUpdate();
+    		$("#scatter").show();
+			$("#residuals").show();
+			if (graphType != '1') {
+	    		graphType = 1;
+	    		$("#timeseries").addClass("active");
+	    		$("#scatter").removeClass("active");
+	    		$("#residuals").removeClass("active");
+	    		$("#histogram").removeClass("active");
+	    		$("#contingency").removeClass("active");
+	    		$("#general").removeClass("active");
+	    		$("#bandp").removeClass("active");
+			}
+    	});
 
-                    function randomUpdate(){
-                        heroChart.stop();
-                        clearTimeout(timeout);
-                        // Get a random bar
-                        timeout = setTimeout(function(){
-                            var randomNumberOfBars = Math.floor(Math.random() * barsCount),
-                                i;
-                            for (i = randomNumberOfBars - 1; i >= 0; i--) {
-                                heroChart.datasets[0].bars[Math.floor(Math.random() * barsCount)].value = Math.round(Math.random() * 100);
-                            };
-                            heroChart.update();
-                        },Math.random() * updateDelayMax);
-                    };
-                }
-            });
-        })();
+    	// Sidebar Selector
+    	$("#side_nav").click(function() {
+    		update();
+    	});
+    	$("#timeseries").click(function() {
+    		graphType = 1;
+    		$("#timeseries").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#general").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+    	$("#scatter").click(function() {
+    		graphType = 2;
+    		$("#scatter").addClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#general").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+    	$("#residuals").click(function() {
+    		graphType = 3;
+    		$("#residuals").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#general").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+		$("#histogram").click(function() {
+    		graphType = 4;
+    		$("#histogram").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#general").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+		$("#contingency").click(function() {
+    		graphType = 5;
+    		$("#contingency").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#general").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+		$("#bandp").click(function() {
+    		graphType = 6;
+    		$("#bandp").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#general").removeClass("active");
+    	});
+		$("#general").click(function() {
+    		graphType = 7;
+    		$("#general").addClass("active");
+    		$("#scatter").removeClass("active");
+    		$("#timeseries").removeClass("active");
+    		$("#residuals").removeClass("active");
+    		$("#histogram").removeClass("active");
+    		$("#contingency").removeClass("active");
+    		$("#bandp").removeClass("active");
+    	});
+
+    	update();
+    	$("#scatter").hide();
+		$("#residuals").hide();
+
+    	// Update Function
+    	function update() {
+    		if (graphMode == '1') {
+    			if (graphType == '1') {
+	    			$("#chart_display").highcharts({
+	    				cart: {type:'line'},
+	    				title: { text: 'Hours of Sleep'},
+	    				xAxis: {
+	    					title: {text:'Date'},
+	    					categories: date
+	    				},	    				
+	    				yAxis: {
+				            title: {text: 'Sleep (Hours)'},
+				            plotLines: [{
+				                value: 0,
+				                width: 1,
+				                color: '#808080'
+				            }]
+				        },
+				        series: [{
+				        	name: 'Sleep',
+				        	data: sleep
+				        }]
+	    			});
+	    		} else if (graphType == '2') {
+	    			$("#chart_display").highcharts({
+	    				chart: {type: 'scatter', zoomType:'xy'},
+	    				title: { text: 'Hours of Sleep'},
+	    				xAxis: {
+				            title: {
+				                enabled: true,
+				                text: 'Height (cm)'
+				            },
+				            startOnTick: true,
+				            endOnTick: true,
+				            showLastLabel: true
+				        },
+	    			});
+	    		}
+    		} else if (graphMode == '2') {
+    			if (graphType == '1') {
+	    			$("#chart_display").highcharts({
+	    				cart: {type:'line'},
+	    				title: { text: 'Lines of Code'},
+	    				xAxis: {
+	    					title: {text:'Date'},
+	    					categories: date
+	    				},	    				
+	    				yAxis: {
+				            title: {text: 'Lines of Code'},
+				            plotLines: [{
+				                value: 0,
+				                width: 1,
+				                color: '#808080'
+				            }]
+				        },
+				        series: [{
+				        	name: 'Lines of Code',
+				        	data: code
+				        }]
+	    			});
+    			}
+    		} else if (graphMode == '3') {
+    			if (graphType == '1') {
+	    			$("#chart_display").highcharts({
+	    				chart: {zoomType:'xy'},
+	    				title: { text: 'Hours of Sleep vs Lines of Code'},
+	    				xAxis: { title: 'Date', categories: date },
+	    				yAxis: [
+	    					{
+					            labels: {style: {color: Highcharts.getOptions().colors[3]}},
+					            title: {
+					                text: 'Hours of Sleep',
+					                style: {color: Highcharts.getOptions().colors[3]}
+					            }
+	    					},
+	    					{
+					            labels: {style: {color: Highcharts.getOptions().colors[2]}},
+					            title: {
+					                text: 'Lines of Code',
+					                style: {color: Highcharts.getOptions().colors[2]}
+					            },
+					            opposite: true
+	    					}
+	    				],
+	    				tooltip: { shared: true },
+	    				series: [
+	    					{ name: 'Hours of Sleep', data: sleep, yAxis: 0, color: '#f7a35c'},
+	    					{ name: 'Lines of Code', data: code, yAxis: 1, color: '#90ed7d' }
+	    				]
+	    			});
+	    		} else if (graphType == '2') {
+	    			$("#chart_display").highcharts({
+	    				chart: {type: 'scatter', zoomType: 'xy'},
+	    				title: { text: 'Hours of Sleep vs Lines of Code'},
+	    				xAxis: {
+	    					title: { enabled: true, text: 'Sleep (Hours)'},
+	    					startOnTick: true,
+	    					endOnTick: true,
+	    					showLastLabel: true
+	    				},
+	    				yAxis: {title: {text: 'Lines of Code'}},
+	    				series: [{ name: 'Sleep vs Lines of Code', data: both, color: 'rgba(223, 83, 83, .5)'}]
+	    			});
+	    		}
+    		}
+    	}
     </script>
 </body>
 
