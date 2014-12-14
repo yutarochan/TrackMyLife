@@ -41,6 +41,13 @@ html, body {
 	color: white;
 }
 
+.tml_bg_green {
+	background: #BEDBD0;
+	padding-top: 5%;
+ 	padding-bottom: 5%;
+	color: #293232;	
+}
+
 .subtitle {
 	font-size: 25px;
 	font-weight: bolder;
@@ -60,11 +67,17 @@ html, body {
 	font-weight: lighter;
 }
 
+.max_height {
+	min-height: 100%;
+	height: 100%;
+}
+
 .tml_var {
 	padding-top: 3%;
 }
 
 .tml_var p {
+	line-height: 35px;
 	padding-top: 1%;
 	font-size: 18px;
 	font-weight: lighter;	
@@ -78,7 +91,19 @@ html, body {
 .tml_vimg {
 	width: 30%;
 	padding-top: 4%;
-	padding-bottom: 3%;
+	padding-bottom: 5%;
+}
+
+.top_nav {
+	padding-top: 2%;
+}
+
+.top_nav:hover {
+	cursor: pointer;
+}
+
+.graph_container {
+	padding-top: 2%;
 }
 
 /* Bootstrap Adjust */
