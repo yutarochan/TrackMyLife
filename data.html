@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TrackMyLife - AP Statistics Project</title>
+
+    <!-- Bootstrap -->
+    <link href='http://fonts.googleapis.com/css?family=Raleway:500,600,700,800,900,400' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container-fluid absolute_center">
+        <div class="container">
+            <br/>
+            <a href="index.html#data">Back</a>
+            <h2>RAW PROJECT DATA</h2>
+            <div class="table-responsive">          
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Hours of Sleep</th>
+                            <th>Lines of Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data_table"></tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/data.js"></script>
+    <script>
+        for (var i = 0; i < date.length; i++)
+            $("#data_table").append("<tr><td>"+date[i]+"</td><td>"+sleep[i]+"</td><td>"+code[i]+"</td></tr>");
+    </script
+
+</body>
+
+</html>

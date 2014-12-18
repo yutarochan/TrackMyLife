@@ -57,10 +57,9 @@
         </div>
     </div>
 
-    <div class="container-fluid text-center max_height tml_bg" id="data">
+    <div class="container-fluid text-center max_height tml_bg">
     	<div class="container">
         	<div class="subtitle">DATA</div>
-        	<a href="data.html">View Recorded Raw Data Spreadsheet</a>
         	<ul id="top_nav" class="nav nav-pills nav-justified top_nav">
 				<li id="sleep"role="presentation" class="active"><a>Hours of Sleep</a></li>
 				<li id="code"role="presentation"><a>Lines of Code</a></li>
@@ -78,7 +77,7 @@
 					<li id="residuals" role="presentation"><a>Residuals Graph</a></li>
 					<li id="histogram" role="presentation"><a>Histogram</a></li>
 					<li id="contingency" role="presentation"><a>Contingency Tables</a></li>
-					<li id="bandp" role="presentation"><a>Box Plot</a></li>
+					<li id="bandp" role="presentation"><a>Box & Whiskers</a></li>
 					<li id="general" role="presentation"><a>General Statistics</a></li>
 				</ul>
 			</div>
@@ -109,8 +108,6 @@
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
-	<script src="http://code.highcharts.com/highcharts-more.js"></script>
-    <script src="js/regression.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/Chart.min.js"></script>
     <script src="js/graphEffect.js"></script>
@@ -132,7 +129,6 @@
 
     		$("#scatter").hide();
 			$("#residuals").hide();
-			$("#contingency").hide();
 			if (graphType != '1') {
 	    		graphType = 1;
 	    		$("#timeseries").addClass("active");
@@ -152,7 +148,6 @@
 
     		$("#scatter").hide();
 			$("#residuals").hide();
-			$("#contingency").hide();
 			if (graphType != '1') {
 		    	graphType = 1;
 	    		$("#timeseries").addClass("active");
@@ -172,7 +167,6 @@
 
     		$("#scatter").show();
 			$("#residuals").show();
-			$("#contingency").show();
 			if (graphType != '1') {
 	    		graphType = 1;
 	    		$("#timeseries").addClass("active");
@@ -263,7 +257,6 @@
     	update();
     	$("#scatter").hide();
 		$("#residuals").hide();
-		$("#contingency").hide();
 
     	// Update Function
     	function update() {
@@ -289,45 +282,25 @@
 				        	data: sleep
 				        }]
 	    			});
-	    		} else if (graphType == '4') {
+	    		} else if (graphType == '2') {
 	    			$("#chart_display").highcharts({
-	    				chart: { type: 'column' },
-	    				title: { text: 'Hours of Sleep Frequency' },
-	    				subtitle: { text: 'Bin Size = 2'},
+	    				chart: {type: 'scatter', zoomType:'xy'},
+	    				title: { text: 'Hours of Sleep'},
 	    				xAxis: {
-	    					title: {text: 'Hours of Sleep'},
-	    					categories: sleep_hist_x
-	    				},
-	    				yAxis: {
-	    					min: 2,
-	    					title: {text: 'Frequency'}
-	    				},
-	    				series: [{name: 'Frequency', data: sleep_hist_y}],
-	    				plotOptions: {
-							column: {
-						    	pointPadding: 0,
-						        borderWidth: 1,
-						        groupPadding: 0,
-						        shadow: false
-						    }
-						},
-						tooltip: { headerFormat: '' }
-	    			});
-	    		} else if (graphType == '6') {
-	    			$("#chart_display").highcharts({
-	    				chart: { type: 'boxplot'},
-	    				title: { text: 'Hours of Sleep' },
-	    				legend: { enabled: true},
-	    				xAxis: { title: {text:'Sleep'}, categories: ['']},
-	    				yAxis: { min:0, title: { text: 'Hours' }},
-	    				series: [{name: 'Hours', data: [[2.1, 4.5, 6.4, 7.4, 12.5]] }],
-						tooltip: { headerFormat: '' }
+				            title: {
+				                enabled: true,
+				                text: 'Height (cm)'
+				            },
+				            startOnTick: true,
+				            endOnTick: true,
+				            showLastLabel: true
+				        },
 	    			});
 	    		}
     		} else if (graphMode == '2') {
     			if (graphType == '1') {
 	    			$("#chart_display").highcharts({
-	    				chart: {type:'line'},
+	    				cart: {type:'line'},
 	    				title: { text: 'Lines of Code'},
 	    				xAxis: {
 	    					title: {text:'Date'},
@@ -346,41 +319,7 @@
 				        	data: code
 				        }]
 	    			});
-				} else if (graphType == '4') {
-	    			$("#chart_display").highcharts({
-	    				chart: { type: 'column' },
-	    				title: { text: 'Lines of Code Frequency' },
-	    				subtitle: { text: 'Bin Size = 250'},
-	    				xAxis: {
-	    					title: {text: 'Lines of Code'},
-	    					categories: code_hist_x
-	    				},
-	    				yAxis: {
-	    					min: 1,
-	    					title: {text: 'Frequency'}
-	    				},
-	    				series: [{name: 'Frequency', data: code_hist_y}],
-	    				plotOptions: {
-							column: {
-						    	pointPadding: 0,
-						        borderWidth: 1,
-						        groupPadding: 0,
-						        shadow: false
-						    }
-						},
-						tooltip: { headerFormat: '' }
-	    			});
-	    		} else if (graphType == '6') {
-	    			$("#chart_display").highcharts({
-	    				chart: { type: 'boxplot'},
-	    				title: { text: 'Lines of Sleep' },
-	    				legend: { enabled: true},
-	    				xAxis: { title: {text:'Code'}, categories: ['']},
-	    				yAxis: { min:0, title: { text: 'Lines' }},
-	    				series: [{name: 'Lines', data: [[128.0, 432.0, 654.0, 864.0, 1569.0]] }],
-						tooltip: { headerFormat: '' }
-	    			});
-	    		}
+    			}
     		} else if (graphMode == '3') {
     			if (graphType == '1') {
 	    			$("#chart_display").highcharts({
@@ -421,18 +360,7 @@
 	    					showLastLabel: true
 	    				},
 	    				yAxis: {title: {text: 'Lines of Code'}},
-	    				series: [
-	    					{ 
-	    						regression: true,
-	    						regressionSettings: {
-	    							type: 'linear',
-                    				color:  'rgba(223, 83, 83, .9)'
-	    						},
-	    						name: 'Sleep vs Lines of Code', 
-	    						data: both, 
-	    						color: Highcharts.getOptions().colors[2]
-	    					}
-	    				]
+	    				series: [{ name: 'Sleep vs Lines of Code', data: both, color: 'rgba(223, 83, 83, .5)'}]
 	    			});
 	    		}
     		}
