@@ -48,6 +48,12 @@ html, body {
 	color: #293232;	
 }
 
+.tml_bg_green p {
+	padding-top: 1%;
+	font-size: 18px;
+	font-weight: lighter;
+}
+
 .subtitle {
 	font-size: 25px;
 	font-weight: bolder;
