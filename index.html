@@ -70,6 +70,7 @@
     	<div class="container graph_container">
 			<div class="col-md-10">
 				<div id="chart_display"></div>
+				<div id="data_disp"></div>
 			</div>
 			<div class="col-md-2">
 				<ul id="side_nav" class="nav nav-pills nav-stacked top_nav">
@@ -79,7 +80,6 @@
 					<li id="histogram" role="presentation"><a>Histogram</a></li>
 					<li id="contingency" role="presentation"><a>Contingency Tables</a></li>
 					<li id="bandp" role="presentation"><a>Box Plot</a></li>
-					<li id="general" role="presentation"><a>General Statistics</a></li>
 				</ul>
 			</div>
 		</div>
@@ -130,8 +130,11 @@
     		$("#code").removeClass("active");
     		$("#both").removeClass("active");
 
+
+			$("#bandp").show();
     		$("#scatter").hide();
 			$("#residuals").hide();
+			$("#histogram").show();
 			$("#contingency").hide();
 			if (graphType != '1') {
 	    		graphType = 1;
@@ -150,8 +153,11 @@
     		$("#sleep").removeClass("active");
     		$("#both").removeClass("active");
 
+
+			$("#bandp").show();
     		$("#scatter").hide();
 			$("#residuals").hide();
+			$("#histogram").show();
 			$("#contingency").hide();
 			if (graphType != '1') {
 		    	graphType = 1;
@@ -171,8 +177,11 @@
     		$("#sleep").removeClass("active");
 
     		$("#scatter").show();
-			$("#residuals").show();
-			$("#contingency").show();
+			$("#residuals").hide();
+			$("#contingency").hide();
+			$("#bandp").hide();
+			$("#histogram").hide();
+			
 			if (graphType != '1') {
 	    		graphType = 1;
 	    		$("#timeseries").addClass("active");
@@ -249,16 +258,6 @@
     		$("#contingency").removeClass("active");
     		$("#general").removeClass("active");
     	});
-		$("#general").click(function() {
-    		graphType = 7;
-    		$("#general").addClass("active");
-    		$("#scatter").removeClass("active");
-    		$("#timeseries").removeClass("active");
-    		$("#residuals").removeClass("active");
-    		$("#histogram").removeClass("active");
-    		$("#contingency").removeClass("active");
-    		$("#bandp").removeClass("active");
-    	});
 
     	update();
     	$("#scatter").hide();
@@ -275,7 +274,7 @@
 	    				xAxis: {
 	    					title: {text:'Date'},
 	    					categories: date
-	    				},	    				
+	    				},	    	
 	    				yAxis: {
 				            title: {text: 'Sleep (Hours)'},
 				            plotLines: [{
@@ -284,11 +283,21 @@
 				                color: '#808080'
 				            }]
 				        },
-				        series: [{
-				        	name: 'Sleep',
-				        	data: sleep
-				        }]
+				        series: [
+				        {
+				        		regression: true,
+	    						regressionSettings: {
+	    							type: 'linear',
+                    				color:  'rgba(223, 83, 83, .9)'
+	    						},
+	    						name: 'Sleep',
+	    						data: sleep_res,
+	    						color: 'rgb(124, 181, 236)'
+	    				}
+				        ]
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4><div class='col-md-12'>Appears that I am sleep slightly less each night (not by a large amount). Some notable outliers are: 11/22, 11/24, 12/02, 12/05 and 12/06. These may have occured due to the amount of workload or energy available during that particular day.</div></div><br><div class='row text-justify'><div class='col-md-6'><b>Direction:</b> Slightly Negative</div><div class='col-md-6'><b>Shape: </b>Multi-Modal</div><div class='col-md-6'><b>Strength:</b> Very Weak Negative Linear Correlation</div><div class='col-md-6'></div></div><div class='row text-justify'><br/><h4>Regression Parameters</h4><div class='col-md-2'><b>R:</b> -0.08</div><div class='col-md-2'><b>Coefficent: </b>7.23</div><div class='col-md-8'><b>Equation (Based on Values):</b> y = -0.08x + 7.23</div></div>");
 	    		} else if (graphType == '4') {
 	    			$("#chart_display").highcharts({
 	    				chart: { type: 'column' },
@@ -313,6 +322,8 @@
 						},
 						tooltip: { headerFormat: '' }
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4><div class='col-md-12'>The amount of sleep is fairly on the low side and is quite rare to see find a day where I sleep more than 10 hours.</div></div><br><div class='row text-justify'><div class='col-md-6'><b>Center:</b> 6.4 Hours</div><div class='col-md-6'><b>Spread: </b>2.1 ~ 12.5 Hours</div><div class='col-md-6'><b>Modality:</b> Unimodal at 6 Hours</div><div class='col-md-6'><b>Skew: </b>Right</div><div class='col-md-6'><b>Symmetry:</b> Asymmetrical</div><div class='col-md-6'><b>Outlier: </b>Group of values between 10 and 12</div></div></div>");
 	    		} else if (graphType == '6') {
 	    			$("#chart_display").highcharts({
 	    				chart: { type: 'boxplot'},
@@ -323,6 +334,9 @@
 	    				series: [{name: 'Hours', data: [[2.1, 4.5, 6.4, 7.4, 12.5]] }],
 						tooltip: { headerFormat: '' }
 	    			});
+
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Statistics</h4></div><div class='row text-justify'><div class='col-md-6'><b>Standard Deviation:</b> 2.593016 Hours</div><div class='col-md-6'><b>Minimum: </b>2.1 Hours</div><div class='col-md-6'><b>Maximum:</b> 12.5 Hours</div><div class='col-md-6'><b>First Quartile (Q1): </b>4.5 Hours</div><div class='col-md-6'><b>Median:</b> 6.4 Hours</div><div class='col-md-6'><b>Third Quartile (Q3): </b>7.4 Hours</div><div class='col-md-6'><b>IQR: </b>2.9 Hours</div><div class='col-md-6'><b>Mean: </b>6.255 Hours</div></div></div>");
 	    		}
     		} else if (graphMode == '2') {
     			if (graphType == '1') {
@@ -342,10 +356,18 @@
 				            }]
 				        },
 				        series: [{
-				        	name: 'Lines of Code',
-				        	data: code
+				        		regression: true,
+	    						regressionSettings: {
+	    							type: 'linear',
+                    				color:  'rgba(223, 83, 83, .9)'
+	    						},
+	    						name: 'Code',
+	    						data: code_res,
+	    						color: 'rgb(124, 181, 236)'
 				        }]
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4><div class='col-md-12'>The amount of code I write each day is growing slightly each day. Notable outliers can be found on 11/20, 12/02, 12/06 and 12/09. Many of these outliers may be due to certain projects being developed on a particular day. The highest outlier on 12/06 was most likely due to <a href='http://localhackday.mlh.io/'>Local Hack Day</a> at Bergen County Academies which is a 12-Hour Hackathon, where I developed a full project in one sitting.</div></div><br><div class='row text-justify'><div class='col-md-6'><b>Direction:</b> Slightly Positive</div><div class='col-md-6'><b>Shape: </b>Multi-Modal</div><div class='col-md-6'><b>Strength:</b> Slightly Strong Positive Linear Correlation</div><div class='col-md-6'></div></div><div class='row text-justify'><br/><h4>Regression Parameters</h4><div class='col-md-2'><b>R:</b> 0.176192</div><div class='col-md-2'><b>R&#178;: </b>0.0310436</div><div class='col-md-6'><b>Equation (Based on Values):</b> y = 20.05x + 410.82</div></div>");
 				} else if (graphType == '4') {
 	    			$("#chart_display").highcharts({
 	    				chart: { type: 'column' },
@@ -370,6 +392,8 @@
 						},
 						tooltip: { headerFormat: '' }
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4></div><br><div class='row text-justify'><div class='col-md-6'><b>Center:</b> 654 Lines</div><div class='col-md-6'><b>Spread: </b>128 ~ 1569 Lines</div><div class='col-md-6'><b>Modality:</b> Bimodal at 250 and 750 Lines</div><div class='col-md-6'><b>Skew: </b>Right</div><div class='col-md-6'><b>Symmetry:</b> Asymmetrical</div><div class='col-md-6'><b>Outlier: </b>Value at 1750 Lines</div></div></div>");
 	    		} else if (graphType == '6') {
 	    			$("#chart_display").highcharts({
 	    				chart: { type: 'boxplot'},
@@ -380,6 +404,8 @@
 	    				series: [{name: 'Lines', data: [[128.0, 432.0, 654.0, 864.0, 1569.0]] }],
 						tooltip: { headerFormat: '' }
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Statistics</h4></div><div class='row text-justify'><div class='col-md-6'><b>Standard Deviation:</b> 325.9291 Lines</div><div class='col-md-6'><b>Minimum: </b>128 Lines</div><div class='col-md-6'><b>Maximum:</b> 1,569 Lines</div><div class='col-md-6'><b>First Quartile (Q1): </b>432 Lines</div><div class='col-md-6'><b>Median:</b> 654 Lines</div><div class='col-md-6'><b>Third Quartile (Q3): </b>864 Lines</div><div class='col-md-6'><b>IQR: </b>432 Lines</div><div class='col-md-6'><b>Mean: </b>663.2917 Lines</div></div></div>");
 	    		}
     		} else if (graphMode == '3') {
     			if (graphType == '1') {
@@ -410,6 +436,8 @@
 	    					{ name: 'Lines of Code', data: code, yAxis: 1, color: '#90ed7d' }
 	    				]
 	    			});
+
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4><div class='col-md-12'>When overlapping two of the timeplots together, a slightly similar trend can be noticed in terms of the hours of sleep and the lines of code produced per day.</div></div>");
 	    		} else if (graphType == '2') {
 	    			$("#chart_display").highcharts({
 	    				chart: {type: 'scatter', zoomType: 'xy'},
@@ -434,6 +462,7 @@
 	    					}
 	    				]
 	    			});
+					$("#data_disp").html("<div class='row text-justify'><br/><h4>General Observations</h4><div class='col-md-12'>Appears that I am sleep slightly less each night (not by a large amount). Some notable outliers are: 11/22, 11/24, 12/02, 12/05 and 12/06. These may have occured due to the amount of workload or energy available during that particular day.</div></div><br><div class='row text-justify'><div class='col-md-6'><b>Direction:</b> Slightly Negative</div><div class='col-md-6'><b>Shape: </b>Multi-Modal</div><div class='col-md-6'><b>Strength:</b> Fairly Weak Negative Linear Correlation</div><div class='col-md-6'></div></div><div class='row text-justify'><br/><h4>Regression Parameters</h4><div class='col-md-4'><b>R:</b> 0.001402</div><div class='col-md-4'><b>R&#178;: </b>0.000001966</div><div class='col-md-4'><b>Coefficent:</b> 5.325236</div><div class='col-md-6'><b>Equation (Based on Values):</b> y = 21.69x + 515.54</div><div class='col-md-6'><b>Equation (Based on R Values):</b> y = x + 7.23</div></div></div>");
 	    		}
     		}
     	}
